@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Albert's Modern Robotics Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e);
+            color: #00ff41;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #00ff41;
+            border-radius: 4px;
+        }
+        
+        .container {
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff41;
+        }
+        
+        .title {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px #00ff41;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #88ff88;
+            animation: fadeIn 0.8s ease-out 0.5s both;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out 0.8s both;
+        }
+        
+        .nav-button {
+            background: transparent;
+            border: 2px solid #00ff41;
+            color: #00ff41;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 20px #00ff41;
+            transform: translateY(-2px);
+        }
+        
+        .nav-button.active {
+            background: #00ff41;
+            color: #000;
+        }
+        
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 0.6s ease-out 1s both;
+        }
+        
+        .project-card {
+            background: rgba(0,20,0,0.8);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,255,65,0.2);
+        }
+        
+        .demo-container {
+            background: linear-gradient(135deg, #001122, #003311);
+            border: 3px solid #00ff41;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .hand-tracking-canvas {
+            width: 100%;
+            max-width: 640px;
+            height: 480px;
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            background: #000;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .action-button {
+            padding: 1rem 2rem;
+            border: 2px solid #00ff41;
+            background: transparent;
+            color: #00ff41;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .action-button:hover {
+            background: #00ff41;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,255,65,0.3);
+        }
+        
+        .action-button.primary {
+            background: #00ff41;
+            color: #000;
+        }
+        
+        .action-button.secondary {
+            border-color: #ffaa00;
+            color: #ffaa00;
+        }
+        
+        .action-button.secondary:hover {
+            background: #ffaa00;
+            color: #000;
+        }
+        
+        .action-button.danger {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+        
+        .action-button.danger:hover {
+            background: #ff4444;
+            color: #fff;
+        }
+        
+        .status-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .status-card {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .terminal-window {
+            background: rgba(0,0,0,0.95);
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            margin: 2rem 0;
+            max-height: 400px;
+            overflow-y: auto;
+            animation: slideUp 0.6s ease-out 1.2s both;
+        }
+        
+        .terminal-header {
+            background: #00ff41;
+            color: #000;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .terminal-content {
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+        
+        .terminal-line {
+            margin: 0.2rem 0;
+        }
+        
+        .terminal-line.visitor { color: #00ffff; }
+        .terminal-line.albert { color: #ff00ff; }
+        .terminal-line.system { color: #ffff00; }
+        .terminal-line.error { color: #ff4444; }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .chat-input {
+            flex: 1;
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0,255,65,0.3);
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">🤖 Albert's Robotics Portfolio</h1>
+            <p class="subtitle">AI • Robotics • Embedded Systems • IoT</p>
+        </header>
+
+        <nav class="navbar">
+            <button class="nav-button active" onclick="showSection('home')">Home</button>
+            <button class="nav-button" onclick="showSection('demos')">Demos</button>
+            <button class="nav-button" onclick="showSection('projects')">Projects</button>
+            <button class="nav-button" onclick="showSection('about')">About</button>
+        </nav>
+
+        <main class="content">
+            <!-- Home Section -->
+            <section id="home" class="section active">
+                <div class="project-card">
+                    <h2>🤖 Welcome to My Robotics Portfolio</h2>
+                    <p>Interactive portfolio showcasing AI, robotics, and embedded systems projects with live demonstrations.</p>
+                    
+                    <h3>🎯 Featured Projects:</h3>
+                    <ul>
+                        <li>🤲 <strong>AI Hand Tracking</strong> - Real-time gesture recognition with MediaPipe</li>
+                        <li>🔐 <strong>ESP32 Smart Lock</strong> - Keypad security system with RTC logging</li>
+                        <li>📊 <strong>Arduino Automation</strong> - Multi-sensor dashboard with real-time control</li>
+                        <li>🧠 <strong>Machine Learning</strong> - Computer vision and AI integration</li>
+                    </ul>
+                    
+                    <div class="button-group">
+                        <button class="action-button primary" onclick="showSection('demos')">🚀 Try Live Demos</button>
+                        <button class="action-button" onclick="showSection('projects')">📁 View Projects</button>
+                        <button class="action-button" onclick="showSection('about')">👨‍💻 About Me</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Demos Section -->
+            <section id="demos" class="section">
+                <div class="demo-container">
+                    <h2>🤖 AI Hand Tracking Demo</h2>
+                    <p>Real-time hand gesture recognition using MediaPipe-style detection</p>
+                    
+                    <div class="demo-grid">
+                        <div>
+                            <video id="cameraVideo" autoplay playsinline style="display: none;"></video>
+                            <canvas id="handCanvas" class="hand-tracking-canvas" width="640" height="480"></canvas>
+                            
+                            <div class="button-group">
+                                <button class="action-button primary" onclick="startHandTracking()">📷 Start Camera</button>
+                                <button class="action-button secondary" onclick="startDemoMode()">🎭 Demo Mode</button>
+                                <button class="action-button danger" onclick="stopHandTracking()">⏹️ Stop</button>
+                                <button class="action-button" onclick="openGitHub()">🐍 GitHub Code</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3>📊 Detection Data</h3>
+                            <div class="status-display">
+                                <div class="status-card">
+                                    <div>Camera Status</div>
+                                    <div id="cameraStatus" style="color: #ff4444;">🔴 Offline</div>
+                                </div>
+                                <div class="status-card">
+                                    <div>Hands Detected</div>
+                                    <div id="handsCount">0</div>
+                                </div>
+                                <div class="status-card">
+                                    <div>Current Gesture</div>
+                                    <div id="currentGesture">❌ No Detection</div>
+                                </div>
+                                <div class="status-card">
+                                    <div>FPS</div>
+                                    <div id="fps">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="section">
+                <div class="project-card">
+                    <h2>🔐 ESP32 Smart Lock System</h2>
+                    <p>Advanced security system with keypad input and RTC logging</p>
+                    <ul>
+                        <li>4x4 Keypad interface</li>
+                        <li>Real-time clock integration</li>
+                        <li>Multiple access levels</li>
+                        <li>WiFi connectivity</li>
+                    </ul>
+                </div>
+                
+                <div class="project-card">
+                    <h2>📊 Arduino Automation Dashboard</h2>
+                    <p>Multi-sensor monitoring and control system</p>
+                    <ul>
+                        <li>Temperature & humidity monitoring</li>
+                        <li>Distance sensor integration</li>
+                        <li>Real-time data visualization</li>
+                        <li>Remote control capabilities</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="section">
+                <div class="project-card">
+                    <h2>👨‍💻 About Albert Baiden-Amissah</h2>
+                    <p>Robotics Engineering student passionate about AI, automation, and embedded systems.</p>
+                    
+                    <h3>🛠️ Technical Skills:</h3>
+                    <ul>
+                        <li><strong>Programming:</strong> Python, C++, JavaScript, C, Assembly</li>
+                        <li><strong>Hardware:</strong> Arduino, ESP32, Raspberry Pi, PIC microcontrollers</li>
+                        <li><strong>AI/ML:</strong> MediaPipe, OpenCV, TensorFlow, scikit-learn</li>
+                        <li><strong>IoT:</strong> WiFi, Bluetooth, MQTT, HTTP protocols</li>
+                    </ul>
+                    
+                    <h3>📧 Contact Information:</h3>
+                    <ul>
+                        <li>Email: papakofi85@gmail.com</li>
+                        <li>WhatsApp: +233 20 850 6317</li>
+                        <li>GitHub: Alberick45</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Terminal Window -->
+            <div class="terminal-window">
+                <div class="terminal-header">💻 Interactive Terminal</div>
+                <div class="terminal-content">
+                    <div id="terminalOutput">
+                        <div class="terminal-line system">[SYSTEM] 🤖 Albert's Robotics Portfolio Initialized</div>
+                        <div class="terminal-line system">[STATUS] All systems operational</div>
+                        <div class="terminal-line system">[READY] Type commands or explore interactive demos</div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." onkeypress="handleEnter(event)">
+                        <button class="action-button" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let isHandTracking = false;
+        let currentGesture = '❌ No Detection';
+        let handsCount = 0;
+        let fps = 0;
+        let stream = null;
+        let detectionInterval = null;
+
+        // Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Terminal functionality
+        function addTerminalMessage(type, text) {
+            const output = document.getElementById('terminalOutput');
+            const line = document.createElement('div');
+            line.className = `terminal-line ${type}`;
+            line.textContent = text;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+            
+            // Keep only last 20 messages
+            const lines = output.querySelectorAll('.terminal-line');
+            if (lines.length > 20) {
+                lines[0].remove();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addTerminalMessage('visitor', `[YOU] ${message}`);
+            
+            // Simple AI responses
+            setTimeout(() => {
+                const responses = {
+                    'hello': 'Hello! I\'m Albert, a robotics engineer specializing in AI and embedded systems.',
+                    'projects': 'I work on hand tracking systems, smart locks, Arduino automation, and IoT devices.',
+                    'skills': 'My skills include Python, C++, JavaScript, Arduino, ESP32, MediaPipe, and OpenCV.',
+                    'contact': 'You can reach me at papakofi85@gmail.com or +233 20 850 6317'
+                };
+                
+                const lowerInput = message.toLowerCase();
+                let response = 'Thanks for your message! Feel free to explore my interactive demos.';
+                
+                Object.keys(responses).forEach(key => {
+                    if (lowerInput.includes(key)) {
+                        response = responses[key];
+                    }
+                });
+                
+                addTerminalMessage('albert', `[ALBERT] ${response}`);
+            }, 1000);
+            
+            input.value = '';
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Hand tracking functionality
+        async function startHandTracking() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: 640, height: 480, facingMode: 'user' }
+                });
+                
+                const video = document.getElementById('cameraVideo');
+                video.srcObject = stream;
+                
+                isHandTracking = true;
+                updateStatus();
+                
+                addTerminalMessage('system', '[CAMERA] 📹 Camera stream established');
+                addTerminalMessage('system', '[HAND-TRACKING] 👋 Scanning for hands...');
+                
+                startHandTrackingSimulation();
+            } catch (error) {
+                addTerminalMessage('error', '[ERROR] ❌ Camera access denied');
+                startDemoMode();
+            }
+        }
+
+        function startDemoMode() {
+            isHandTracking = true;
+            updateStatus();
+            addTerminalMessage('system', '[DEMO-MODE] 🎭 Starting hand tracking simulation');
+            addTerminalMessage('system', '[AI] 🤖 Showing MediaPipe-style landmark tracking');
+            startHandTrackingSimulation();
+        }
+
+        function startHandTrackingSimulation() {
+            const gestures = [
+                { name: 'Open Hand', emoji: '✋', fingers: 5 },
+                { name: 'Fist', emoji: '✊', fingers: 0 },
+                { name: 'Peace Sign', emoji: '✌️', fingers: 2 },
+                { name: 'Thumbs Up', emoji: '👍', fingers: 1 },
+                { name: 'Pointing', emoji: '👉', fingers: 1 },
+                { name: 'Rock On', emoji: '🤘', fingers: 2 }
+            ];
+
+            let gestureIndex = 0;
+            let frameCount = 0;
+
+            detectionInterval = setInterval(() => {
+                if (!isHandTracking) return;
+
+                const canvas = document.getElementById('handCanvas');
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw animated hand landmarks
+                drawAnimatedHand(ctx, frameCount);
+
+                // Update gesture
+                const currentGest = gestures[Math.floor(gestureIndex / 30) % gestures.length];
+                currentGesture = `${currentGest.emoji} ${currentGest.name}`;
+                handsCount = 1;
+                fps = 30;
+                updateStatus();
+
+                if (gestureIndex % 60 === 0) {
+                    addTerminalMessage('system', `[DETECTION] ${currentGest.emoji} ${currentGest.name} detected`);
+                }
+
+                gestureIndex++;
+                frameCount += 0.1;
+            }, 100);
+        }
+
+        function drawAnimatedHand(ctx, frame) {
+            const centerX = 320 + Math.sin(frame * 0.5) * 30;
+            const centerY = 240 + Math.cos(frame * 0.3) * 20;
+
+            // Draw hand landmarks
+            ctx.fillStyle = '#00ff41';
+            ctx.strokeStyle = '#ff4444';
+            ctx.lineWidth = 2;
+
+            // Simplified hand structure
+            const landmarks = [
+                { x: centerX, y: centerY + 100 }, // Wrist
+                { x: centerX - 30, y: centerY + 50 }, // Thumb base
+                { x: centerX - 45, y: centerY + 20 }, // Thumb mid
+                { x: centerX - 55, y: centerY - 10 }, // Thumb tip
+                { x: centerX - 20, y: centerY + 80 }, // Index base
+                { x: centerX - 25, y: centerY + 40 }, // Index mid
+                { x: centerX - 30, y: centerY }, // Index tip
+                { x: centerX, y: centerY + 85 }, // Middle base
+                { x: centerX, y: centerY + 45 }, // Middle mid
+                { x: centerX, y: centerY - 35 }, // Middle tip
+                { x: centerX + 20, y: centerY + 80 }, // Ring base
+                { x: centerX + 25, y: centerY + 45 }, // Ring mid
+                { x: centerX + 30, y: centerY - 25 }, // Ring tip
+                { x: centerX + 35, y: centerY + 70 }, // Pinky base
+                { x: centerX + 40, y: centerY + 40 }, // Pinky mid
+                { x: centerX + 45, y: centerY - 10 } // Pinky tip
+            ];
+
+            // Draw connections
+            const connections = [
+                [0, 1], [1, 2], [2, 3], // Thumb
+                [0, 4], [4, 5], [5, 6], // Index
+                [0, 7], [7, 8], [8, 9], // Middle
+                [0, 10], [10, 11], [11, 12], // Ring
+                [0, 13], [13, 14], [14, 15] // Pinky
+            ];
+
+            connections.forEach(([start, end]) => {
+                ctx.beginPath();
+                ctx.moveTo(landmarks[start].x, landmarks[start].y);
+                ctx.lineTo(landmarks[end].x, landmarks[end].y);
+                ctx.stroke();
+            });
+
+            // Draw landmarks
+            landmarks.forEach((point, index) => {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, index === 0 ? 8 : 5, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+        }
+
+        function stopHandTracking() {
+            isHandTracking = false;
+            currentGesture = '❌ No Detection';
+            handsCount = 0;
+            fps = 0;
+            updateStatus();
+
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+
+            if (detectionInterval) {
+                clearInterval(detectionInterval);
+                detectionInterval = null;
+            }
+
+            const canvas = document.getElementById('handCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            addTerminalMessage('system', '[CAMERA] 📹 Tracking stopped');
+        }
+
+        function updateStatus() {
+            document.getElementById('cameraStatus').innerHTML = isHandTracking ? 
+                '<span style="color: #44ff44;">🟢 Active</span>' : 
+                '<span style="color: #ff4444;">🔴 Offline</span>';
+            document.getElementById('handsCount').textContent = handsCount;
+            document.getElementById('currentGesture').textContent = currentGesture;
+            document.getElementById('fps').textContent = fps;
+        }
+
+        function openGitHub() {
+            addTerminalMessage('system', '[GITHUB] 🐍 Opening repository...');
+            window.open('https://github.com/Alberick45/robotics-portfolio', '_blank');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            addTerminalMessage('system', '[INIT] 🚀 Portfolio loaded successfully');
+            addTerminalMessage('system', '[TIP] 💡 Try the hand tracking demo or ask me questions!');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+
+        // Project details function
+        function showProjectDetails(project) {
+            const modal = document.getElementById('projectModal');
+            const content = document.getElementById('modalContent');
+            
+            const projectData = {
+                smartlock: {
+                    title: 'SMART LOCK SYSTEM',
+                    description: 'Advanced IoT security system featuring ESP32 microcontroller integration, real-time web dashboard, and automated access control protocols.',
+                    features: [
+                        'Real-time Clock (RTC) integration for time-based access',
+                        'Network Time Protocol (NTP) synchronization',
+                        'Web dashboard for remote monitoring and control',
+                        'Encrypted communication protocols',
+                        'Battery backup system for power failures',
+                        'Mobile app integration for smartphone control'
+                    ],
+                    demo: 'This system represents the future of home security, combining IoT connectivity with robust embedded systems programming.'
+                },
+                handtracking: {
+                    title: 'AI HAND TRACKING SYSTEM',
+                    description: 'Computer vision system utilizing MediaPipe and OpenCV for real-time gesture recognition, hand measurement, and human-computer interaction.',
+                    features: [
+                        'Real-time hand landmark detection',
+                        'Gesture recognition with 21 key points',
+                        'Distance and angle measurements',
+                        'Multi-hand tracking capabilities',
+                        'Custom gesture training modules',
+                        'Integration with robotic control systems'
+                    ],
+                    demo: 'Revolutionary interface technology enabling natural human-robot interaction through advanced computer vision algorithms.'
+                },
+                arduino: {
+                    title: 'ARDUINO AUTOMATION SUITE',
+                    description: 'Comprehensive collection of embedded systems for home and industrial automation, featuring sensor integration and intelligent control algorithms.',
+                    features: [
+                        'Automatic plant watering with soil moisture sensors',
+                        'Motion-controlled lighting systems',
+                        'Temperature-based fan controllers',
+                        'PIR motion detection security systems',
+                        'Ultrasonic distance measurement',
+                        'I2C communication protocols'
+                    ],
+                    demo: 'Smart automation solutions bringing intelligence to everyday objects through embedded systems engineering.'
+                },
+                attendance: {
+                    title: 'BIOMETRIC ATTENDANCE SYSTEM',
+                    description: 'Advanced fingerprint recognition system with secure data logging, comprehensive reporting, and multi-user management capabilities.',
+                    features: [
+                        'Fingerprint enrollment and matching',
+                        'Secure database storage',
+                        'Real-time attendance logging',
+                        'Automated report generation',
+                        'Admin panel with user management',
+                        'Anti-spoofing security measures'
+                    ],
+                    demo: 'Cutting-edge biometric solution ensuring accurate attendance tracking with military-grade security protocols.'
+                }
+            };
+            
+            const data = projectData[project];
+            if (data) {
+                content.innerHTML = `
+                    <h2 style="color: #00ff41; margin-bottom: 20px;">${data.title}</h2>
+                    <p style="margin-bottom: 20px; line-height: 1.6;">${data.description}</p>
+                    <h3 style="color: #00ff41; margin: 20px 0;">KEY FEATURES:</h3>
+                    <ul style="margin: 20px 0; padding-left: 20px;">
+                        ${data.features.map(feature => `<li style="margin: 10px 0;">${feature}</li>`).join('')}
+                    </ul>
+                    <div style="background: rgba(0,255,65,0.1); padding: 20px; border-radius: 10px; border: 1px solid #00ff41; margin-top: 20px;">
+                        <h4 style="color: #00ff41; margin-bottom: 10px;">PROJECT ANALYSIS:</h4>
+                        <p>${data.demo}</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button class="demo-button" onclick="runProjectDemo('${project}')">EXECUTE DEMONSTRATION</button>
+                    </div>
+                `;
+                modal.style.display = 'flex';
+            }
+        }
+        
+        // Close modal function
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.style.display = 'none';
+        }
+        
+        // Run project demo function
+        function runProjectDemo(project) {
+            const terminalContent = document.getElementById('terminalContent');
+            const demos = {
+                smartlock: [
+                    'Connecting to ESP32 module...',
+                    'Authentication successful',
+                    'Lock status: SECURED',
+                    'Web dashboard: ACTIVE',
+                    'System ready for commands'
+                ],
+                handtracking: [
+                    'Initializing camera feed...',
+                    'Loading MediaPipe models...',
+                    'Hand detection: ACTIVE',
+                    'Gesture recognition: ONLINE',
+                    'Tracking 21 landmarks per hand'
+                ],
+                arduino: [
+                    'Connecting to Arduino network...',
+                    'Sensor calibration complete',
+                    'Automation protocols: ACTIVE',
+                    'All systems operational',
+                    'Smart home ready'
+                ],
+                attendance: [
+                    'Biometric scanner: ONLINE',
+                    'Database connection: SECURE',
+                    'Fingerprint matching: READY',
+                    'Attendance logging: ACTIVE',
+                    'System ready for enrollment'
+                ]
+            };
+            
+            const messages = demos[project] || ['Demo not available'];
+            
+            // Clear terminal
+            terminalContent.innerHTML = '<div class="terminal-line">$ run_demo.py --project=' + project + '</div>';
+            
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < messages.length) {
+                    const line = document.createElement('div');
+                    line.className = 'terminal-line';
+                    line.textContent = '> ' + messages[i];
+                    terminalContent.appendChild(line);
+                    terminalContent.scrollTop = terminalContent.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    const line = document.createElement('div');
+                    line.className = 'terminal-line';
+                    line.innerHTML = '> Demo complete. System ready <span class="cursor">_</span>';
+                    terminalContent.appendChild(line);
+                }
+            }, 800);
+            
+            closeModal();
+        }
+        
+        // Send message function
+        function sendMessage(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            const terminalContent = document.getElementById('terminalContent');
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.style.color = '#00ff41';
+            line.textContent = '> MESSAGE TRANSMITTED SUCCESSFULLY';
+            terminalContent.appendChild(line);
+            
+            const line2 = document.createElement('div');
+            line2.className = 'terminal-line';
+            line2.textContent = '> Albert will respond within 24 hours';
+            terminalContent.appendChild(line2);
+            
+            terminalContent.scrollTop = terminalContent.scrollHeight;
+            
+            // Reset form
+            form.reset();
+            
+            // Show success animation
+            const submitButton = form.querySelector('.submit-button');
+            submitButton.textContent = 'MESSAGE SENT!';
+            submitButton.style.background = 'rgba(0,255,65,0.3)';
+            
+            setTimeout(() => {
+                submitButton.textContent = 'TRANSMIT MESSAGE';
+                submitButton.style.background = 'transparent';
+            }, 3000);
+        }

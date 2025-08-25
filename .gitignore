@@ -1,0 +1,72 @@
+# Virtual environments
+hand_tracking_env/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Large media files (if any)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mkv
+*.m4v
+*.3gp
+*.3g2
+*.asf
+*.avi
+*.dv
+*.f4v
+*.gif (large)
+*.iso
+*.m2ts
+*.m4v
+*.mj2
+*.mov
+*.mp4
+*.mpeg
+*.mpg
+*.mts
+*.mxf
+*.ogv
+*.qt
+*.rm
+*.rmvb
+*.swf
+*.ts
+*.vob
+*.webm
+*.wmv
+*.yuv
