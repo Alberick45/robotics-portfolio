@@ -1,18 +1,8 @@
 {
-  "builds": [
+  "rewrites": [
     {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/robotics_portfolio.html",
-      "dest": "/index.html"
+      "source": "/robotics_portfolio.html",
+      "destination": "/index.html"
     }
   ],
   "headers": [
@@ -33,5 +23,7 @@
         }
       ]
     }
-  ]
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
